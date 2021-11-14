@@ -10,7 +10,7 @@ import java.util.List;
  * @date ：Created in 2021/11/12 0012 16:55
  * @description：
  */
-public interface ToPayIrDao extends JpaRepository<ToPayIr,String>{
+public interface ToPayIrDao extends JpaRepository<ToPayIr, String> {
 
     List<ToPayIr> findByAcctBankCde(String acctBankCde);
 

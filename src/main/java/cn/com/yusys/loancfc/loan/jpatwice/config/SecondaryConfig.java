@@ -1,5 +1,6 @@
 package cn.com.yusys.loancfc.loan.jpatwice.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,9 +28,10 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef="entityManagerFactorySecondary",
-        transactionManagerRef="transactionManagerSecondary",
-        basePackages= { "cn.com.yusys.loancfc.loan.jpatwice.seconddao" })
+        entityManagerFactoryRef = "entityManagerFactorySecondary",
+        transactionManagerRef = "transactionManagerSecondary",
+        basePackages = {"cn.com.yusys.loancfc.loan.jpatwice.seconddao"})
+@Slf4j
 public class SecondaryConfig {
 
     @Autowired
@@ -46,15 +47,15 @@ public class SecondaryConfig {
     @Value("${spring.jpa.hibernate.secondary-dialect}")
     private String secondaryDialect;
 
-
-
     @Bean(name = "entityManagerSecondary")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
+        log.info("生成entityManagerSecondary...");
         return entityManagerFactorySecondary(builder).getObject().createEntityManager();
     }
 
     @Bean(name = "entityManagerFactorySecondary")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactorySecondary (EntityManagerFactoryBuilder builder) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactorySecondary(EntityManagerFactoryBuilder builder) {
+        log.info("生成entityManagerFactorySecondary...");
         return builder
                 .dataSource(secondaryDataSource)
                 .properties(getVendorProperties(secondaryDataSource))
@@ -70,6 +71,8 @@ public class SecondaryConfig {
 
     @Bean(name = "transactionManagerSecondary")
     PlatformTransactionManager transactionManagerSecondary(EntityManagerFactoryBuilder builder) {
+        log.info("生成transactionManagerSecondary...");
         return new JpaTransactionManager(entityManagerFactorySecondary(builder).getObject());
     }
+
 }

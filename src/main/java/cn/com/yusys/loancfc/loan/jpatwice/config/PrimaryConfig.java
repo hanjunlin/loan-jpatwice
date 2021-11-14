@@ -1,5 +1,6 @@
 package cn.com.yusys.loancfc.loan.jpatwice.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ import java.util.Map;
         transactionManagerRef = "transactionManagerPrimary", //配置 事物管理器  transactionManager
         basePackages = {"cn.com.yusys.loancfc.loan.jpatwice.primarydao"}//设置持久层所在位置
 )
+@Slf4j
 public class PrimaryConfig {
 
     @Autowired
@@ -46,16 +48,14 @@ public class PrimaryConfig {
     @Value("${spring.jpa.hibernate.primary-dialect}")
     private String primaryDialect;// 获取对应的数据库方言
 
-
     /**
-     *
      * @param builder
      * @return
      */
     @Bean(name = "entityManagerFactoryPrimary")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary(EntityManagerFactoryBuilder builder) {
-
+        log.info("生成entityManagerFactoryPrimary...");
         return builder
                 //设置数据源
                 .dataSource(primaryDataSource)
@@ -84,6 +84,7 @@ public class PrimaryConfig {
     @Bean(name = "transactionManagerPrimary")
     @Primary
     PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder) {
+        log.info("生成transactionManagerPrimary...");
         return new JpaTransactionManager(entityManagerFactoryPrimary(builder).getObject());
     }
 
