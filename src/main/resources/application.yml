@@ -1,0 +1,64 @@
+app:
+  version: '@project.version@'
+  build:
+    time: '@timestamp@'
+server:
+  port: 6004 #应用启动端口
+spring:
+  application:
+    name: loan-jpatwice-service  #应用名称
+  primary:
+    # 数据库配置，不使用数据库时请删除以下配置
+    datasource:
+      type: com.zaxxer.hikari.HikariDataSource            # datasource使用的连接池类型
+      driver-class-name: com.mysql.cj.jdbc.Driver  # 数据库驱动类
+      jdbc-url: jdbc:mysql://192.168.31.155:3306/union_ycloans_pay?useSSL=false        # 数据库连接的url
+      username: cube_ycloans # 数据库连接的用户名
+      password: cube_ycloans # 数据库连接的密码
+  secondary:
+    # 数据库配置，不使用数据库时请删除以下配置
+    datasource:
+      type: com.zaxxer.hikari.HikariDataSource            # datasource使用的连接池类型
+      driver-class-name: com.mysql.cj.jdbc.Driver  # 数据库驱动类
+      jdbc-url: jdbc:mysql://192.168.31.155:3306/union_ycloans_pay?useSSL=false        # 数据库连接的url
+      username: cube_ycloans # 数据库连接的用户名
+      password: cube_ycloans # 数据库连接的密码
+  jpa:
+    show-sql: true
+    properties.hibernate.format_sql: true
+    hibernate:
+      primary-dialect: org.hibernate.dialect.MySQL5Dialect
+      secondary-dialect: org.hibernate.dialect.MySQL5Dialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  hikari:
+    minimum-idle: 10
+    maximum-pool-size: 30
+    data-source-properties:
+      cachePrepStmts: true
+      prepStmtCacheSize: 250
+      prepStmtCacheSqlLimit: 2048
+      useServerPrepStmts: true
+  batch:
+    job.enabled: false
+mybatis:
+  type-aliases-package: cn.com.yusys.loan.loanbatch.pojo
+  configuration:
+    auto-mapping-behavior: partial
+    mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  file:
+    name: ${spring.application.name}_${server.port}.log
+  level:
+    root: INFO
+    springfox.documentation.spring.web.readers.operation: OFF  #springfox日志关闭输出
+    com.ctrip.framework.apollo: OFF
+    org.springframework.security:
+      - debug
+      - info
+    org.springframework.web: error
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.SQL: debug
+    org.hibernate.engine.QueryParameters: debug
+    org.hibernate.engine.query.HQLQueryPlan: debug
