@@ -44,9 +44,6 @@ public class SecondaryConfig {
     @Qualifier("secondaryDataSource")
     private DataSource secondaryDataSource;
 
-    @Value("${spring.jpa.hibernate.secondary-dialect}")
-    private String secondaryDialect;
-
     @Bean(name = "entityManagerSecondary")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
         log.info("生成entityManagerSecondary...");
@@ -58,13 +55,13 @@ public class SecondaryConfig {
         log.info("生成entityManagerFactorySecondary...");
         return builder
                 .dataSource(secondaryDataSource)
-                .properties(getVendorProperties(secondaryDataSource))
+                .properties(getVendorProperties(jpaProperties))
                 .packages("cn.com.yusys.loancfc.loan.jpatwice.entity")
                 .persistenceUnit("secondaryPersistenceUnit")
                 .build();
     }
 
-    private Map<String, Object> getVendorProperties(DataSource dataSource) {
+    private Map<String, Object> getVendorProperties(JpaProperties jpaProperties) {
         return hibernateProperties.determineHibernateProperties(
                 jpaProperties.getProperties(), new HibernateSettings());
     }

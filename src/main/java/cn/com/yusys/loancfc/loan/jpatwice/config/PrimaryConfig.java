@@ -45,9 +45,6 @@ public class PrimaryConfig {
     @Qualifier("primaryDataSource")
     private DataSource primaryDataSource;// 自动注入配置好的数据源
 
-    @Value("${spring.jpa.hibernate.primary-dialect}")
-    private String primaryDialect;// 获取对应的数据库方言
-
     /**
      * @param builder
      * @return
@@ -60,7 +57,7 @@ public class PrimaryConfig {
                 //设置数据源
                 .dataSource(primaryDataSource)
                 //设置数据源属性
-                .properties(getVendorProperties(primaryDataSource))
+                .properties(getVendorProperties(jpaProperties))
                 //设置实体类所在位置.扫描所有带有 @Entity 注解的类
                 .packages("cn.com.yusys.loancfc.loan.jpatwice.entity")
                 // Spring会将EntityManagerFactory注入到Repository之中.有了 EntityManagerFactory之后,
@@ -70,7 +67,7 @@ public class PrimaryConfig {
 
     }
 
-    private Map<String, Object> getVendorProperties(DataSource dataSource) {
+    private Map<String, Object> getVendorProperties(JpaProperties jpaProperties) {
         return hibernateProperties.determineHibernateProperties(
                 jpaProperties.getProperties(), new HibernateSettings());
     }

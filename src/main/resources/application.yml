@@ -27,8 +27,7 @@ spring:
     show-sql: true
     properties.hibernate.format_sql: true
     hibernate:
-      primary-dialect: org.hibernate.dialect.MySQL5Dialect
-      secondary-dialect: org.hibernate.dialect.MySQL5Dialect
+      dialect: org.hibernate.dialect.MySQL5Dialect
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   hikari:
